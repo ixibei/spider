@@ -27,7 +27,6 @@ class Base
         $this->test = isset($param['test']) ? $param['test'] : false;
         $this->json_test = isset($param['json_test']) ? $param['json_test'] : false;
         $this->url = $param['url'];
-        $param['regular']['load_js'] = isset($param['regular']['load_js']) ? $param['regular']['load_js'] : '';
         $this->regular = (object)$param['regular'];
     }
 

@@ -6,7 +6,9 @@ class Json extends Html  {
     public $data = [];//采集的网页信息
     public $content = '';//url内容
 
-    public function getJsonList(){
+    public function getJsonList()
+    {
+        $this->regular->load_js = isset($this->regular->load_js) ? $this->regular->load_js : false;
         $this->content = $this->getContent($this->url,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,false,$this->regular->load_js);
         if(!$this->content){
             return $this->_parseError('can\'t connect this url');
