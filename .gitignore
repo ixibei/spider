@@ -2,6 +2,7 @@
 vendor
 logs
 Cache
+
 phantomjs
 package-lock.json
 node_modules
