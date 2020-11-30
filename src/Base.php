@@ -106,9 +106,6 @@ class Base
     public function getContent($url, $encoding = 'utf-8',$urlAddParam = true,$isProxy = false,$httpRefer = false,$loadJs = false)
     {
         $url = html_entity_decode($url);
-        if($loadJs){
-            return $this->getContentLoadJs($url);
-        }
         if($urlAddParam){
             if(strpos($url,'?') !== false){
                 $url .= '&s='.mt_rand(0,1000);
@@ -117,10 +114,16 @@ class Base
             }
         }
 
-        $curl = new Curl();
-        $try_times = 0;
         $cip = '220.181.108.'.mt_rand(0,254);
         $xip = '220.181.32.'.mt_rand(0,254);
+
+        if($loadJs){
+            return $this->getContentLoadJs($url,$encoding,$httpRefer,$cip,$xip);
+        }
+
+        $curl = new Curl();
+        $try_times = 0;
+
         do {
             try {
                 if($isProxy && class_exists('DB')){
@@ -185,7 +188,7 @@ class Base
         return $response;
     }
 
-    public function getContentLoadJs($url)
+    public function getContentLoadJs($url,$encoding,$httpRefer,$cip,$xip)
     {
         if(PHP_OS == 'WINNT'){
             $file = __DIR__.'/../phantomjs/phantomjs.exe';
@@ -198,12 +201,26 @@ class Base
             }
         }
         $client = Client::getInstance();
+        $client->getEngine()->addOption('--load-images=false');
+        $client->getEngine()->addOption('--ignore-ssl-errors=true');
+
         $client->getEngine()->setPath($file);
         $request = $client->getMessageFactory()->createRequest($url, 'GET');
+        $request->setTimeout(10000);//10s超时
+        $request->setDelay(5);//5s加载时间
+        $request->addSetting('userAgent','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/600.4.10 (KHTML, like Gecko) Version/8.0.4 Safari/600.4.10');
+        $request->addHeader('Referer',$httpRefer);
+        $request->addHeader('CLIENT-IP',$cip);
+        $request->addHeader('X-FORWARDED-FOR',$xip);
+
         $response = $client->getMessageFactory()->createResponse();
         $client->send($request, $response);
         if($response->getStatus() === 200) {
-            return $response->getContent();
+            $content = $response->getContent();
+            if ($encoding != 'utf-8') {
+                $content = mb_convert_encoding($content, 'utf-8', $encoding);
+            }
+            return $content;
         } else {
             $str = '没有获取到内容，状态码'.$response->getStatus();
             $this->_parseError($str);
