@@ -1,0 +1,53 @@
+{
+  "name":"ixibei/spider",
+  "description":"website list collect",
+  "license":"MIT",
+  "keywords":["spider","collect"],
+  "type":"library",
+  "version":"2.0.1",
+  "authors":[
+    {
+      "name":"eventlot",
+      "email":"1013999385@qq.com",
+      "homepage":"http://www.segementfault.com"
+    }
+  ],
+
+  "require":{
+    "php": ">=5.5.9",
+    "monolog/monolog": "~1.11",
+    "ezyang/htmlpurifier": "4.9.*"
+  },
+
+  "require-dev":{
+    "jonnyw/php-phantomjs": "4.*"
+  },
+
+  "autoload":{
+    "psr-4":{
+      "Ixibei\\Spider\\":"src"
+    }
+  },
+
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://mirrors.aliyun.com/composer/"
+    }
+  },
+
+  "scripts": {
+    "post-install-cmd": [
+      "PhantomInstaller\\Installer::installPhantomJS"
+    ],
+    "post-update-cmd": [
+      "PhantomInstaller\\Installer::installPhantomJS"
+    ]
+  },
+
+  "config": {
+    "bin-dir": "bin"
+  },
+
+  "minimum-stability": "dev"
+}
