@@ -47,6 +47,7 @@ class Base
         //如果是laravel框架引用，则将错误信息保存在数据库中
         if(class_exists('DB')){
             if($this->regular){
+                $str = strip_tags($str);
                 $str = addslashes(htmlspecialchars($str));
                 DB::table('spider_log')->insert(['content'=>$str,'status'=>2,'type'=>1,'spider_id'=>$this->regular->id]);
                 DB::statement("update spider set failure_times=failure_times+1,all_failure_times=all_failure_times+1,failure_reason='".$str."' where id=".$this->regular->id);
