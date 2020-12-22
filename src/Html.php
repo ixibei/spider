@@ -569,4 +569,41 @@ class Html extends Base
         $content = str_replace(['<iframe ','<embed '],['<iframe width="100%" height="100%" frameborder="0" ','<embed width="100%" height="100%" '],$content);
         return $content;
     }
+
+    /**
+     * 返回最终的URL地址
+     * @param $url
+     * @return mixed
+     */
+    public function traceUrl($url)
+    {
+        if(strpos($url,'http') === false){
+            return $url;
+        }
+
+        //检测后缀是否是 .apk 结尾 若是 .apk 结尾，则直接返回下载地址
+        $urls = explode('.',$url);
+        $last = array_pop($urls);
+        if($last == 'apk'){
+            return $url;
+        }
+
+        //检测是否是苹果官网的地址
+        if(strpos($url,'apple.com') !== false){
+            return $url;
+        }
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_TIMEOUT, 6);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_REFERER, $this->data['url']);//模拟来路
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.26 Safari/537.36 Core/1.63.5967.400 LBBROWSER/10.1.3622.400');
+        curl_setopt($ch, CURLOPT_NOBODY, true);// 不需要页面内容
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);// 不直接输出
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);// 返回最后的 Location
+        curl_exec($ch);
+        $info = curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);
+        curl_close($ch);
+        return $info;
+    }
 }
