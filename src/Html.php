@@ -85,75 +85,77 @@ class Html extends Base
      */
     public function getHtmlDetail($arr)
     {
+        $this->data['url'] = $arr['url'];
         $this->url = trim($arr['url']);
-        $this->regular->load_js = isset($this->regular->load_js) ? $this->regular->load_js : false;
-        $content = $this->getContent($this->url,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,$this->url,$this->regular->load_js);
-        if(!$content){
-            return false;
-        }
+        //直接入库模式
+        if(!isset($this->regular->list_ruku) || !$this->regular->list_ruku){
+            $this->regular->load_js = isset($this->regular->load_js) ? $this->regular->load_js : false;
+            $content = $this->getContent($this->url,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,$this->url,$this->regular->load_js);
+            if(!$content){
+                return false;
+            }
 
-        if($this->regular->html_replace){
-            $content = $this->_replace($content,$this->regular->html_replace);
-        }
+            if($this->regular->html_replace){
+                $content = $this->_replace($content,$this->regular->html_replace);
+            }
 
-        $this->dom = new simple_html_dom($content);
+            $this->dom = new simple_html_dom($content);
 
-        $detailObj = $this->_parseMultMark($this->dom,$this->regular->detail);//处理内容详情文字
-        if(!$detailObj) {
-            return $this->_parseError('找不到内容详情，或内容详情字段为空！');
-        }
+            $detailObj = $this->_parseMultMark($this->dom,$this->regular->detail);//处理内容详情文字
+            if(!$detailObj) {
+                return $this->_parseError('找不到内容详情，或内容详情字段为空！');
+            }
 
-        //截取开始和结束的制定标识
-        $this->data['content'] = $this->_cutEndStartPos($detailObj->innertext,$this->regular->end_pos,$this->regular->start_pos);
+            //截取开始和结束的制定标识
+            $this->data['content'] = $this->_cutEndStartPos($detailObj->innertext,$this->regular->end_pos,$this->regular->start_pos);
 
-        //提前切割好需要替换的字符
-        $this->regular->detail_replace = is_array($this->regular->detail_replace) ? $this->regular->detail_replace : array_filter(explode("\r\n",$this->regular->detail_replace));
+            //提前切割好需要替换的字符
+            $this->regular->detail_replace = is_array($this->regular->detail_replace) ? $this->regular->detail_replace : array_filter(explode("\r\n",$this->regular->detail_replace));
 
-        //如果文章存在分页则 寻找下一页内容
-        if($this->regular->detail_page){
-            $pagesObj = $this->analyticRule($this->regular->detail_page,$this->dom);
-            if($pagesObj){
-                $pageHtml = $pagesObj->innertext;
-                $this->baseNum = self::_extractNum($this->url);//获取第一页原始数字
-                $nextUrl = $this->_haveNextPage($pageHtml,$this->url);
-                if($nextUrl){
-                    $this->_parsePage($nextUrl);
+            //如果文章存在分页则 寻找下一页内容
+            if($this->regular->detail_page){
+                $pagesObj = $this->analyticRule($this->regular->detail_page,$this->dom);
+                if($pagesObj){
+                    $pageHtml = $pagesObj->innertext;
+                    $this->baseNum = self::_extractNum($this->url);//获取第一页原始数字
+                    $nextUrl = $this->_haveNextPage($pageHtml,$this->url);
+                    if($nextUrl){
+                        $this->_parsePage($nextUrl);
+                    }
                 }
             }
-        }
 
-        //替换内容中不需要的词语 第一次替换
-        $this->data['content'] = $this->_replace($this->data['content']);
+            //替换内容中不需要的词语 第一次替换
+            $this->data['content'] = $this->_replace($this->data['content']);
 
-        //需要禁止标签里的标签里的内容 或者 需要禁止内容中的class 或者是id
-        $forbidElement = array_filter(explode(' ',$this->regular->detail_forbid_tag));
-        $this->data['content'] = $this->forbidClassAndTag($forbidElement,$this->data['content']);
+            //需要禁止标签里的标签里的内容 或者 需要禁止内容中的class 或者是id
+            $forbidElement = array_filter(explode(' ',$this->regular->detail_forbid_tag));
+            $this->data['content'] = $this->forbidClassAndTag($forbidElement,$this->data['content']);
 
-        $stripTags = [];
-        if($this->regular->strip_tags){
-            $stripTags = explode(' ',$this->regular->strip_tags);
-        }
-        $this->data['content'] = $this->htmlpurifier($this->data['content'],$stripTags);//去除乱七八糟的标签 链接
+            $stripTags = [];
+            if($this->regular->strip_tags){
+                $stripTags = explode(' ',$this->regular->strip_tags);
+            }
+            $this->data['content'] = $this->htmlpurifier($this->data['content'],$stripTags);//去除乱七八糟的标签 链接
 
-        //将分页符替换成 本站需要的分页符
-        $this->data['content'] = str_replace('$$$$','<hr/>',$this->data['content']);
-        //去除空段落
-        $this->data['content'] = $this->_parseContent($this->data['content']);
-        //处理指定标签相关属性
-        $this->data['content'] = $this->_addTagsAttribute($this->data['content']);
-        //替换内容中不需要的词语 第二次替换
-        $this->data['content'] = $this->_replace($this->data['content']);
+            //将分页符替换成 本站需要的分页符
+            $this->data['content'] = str_replace('$$$$','<hr/>',$this->data['content']);
+            //去除空段落
+            $this->data['content'] = $this->_parseContent($this->data['content']);
+            //处理指定标签相关属性
+            $this->data['content'] = $this->_addTagsAttribute($this->data['content']);
+            //替换内容中不需要的词语 第二次替换
+            $this->data['content'] = $this->_replace($this->data['content']);
 
-        $this->data['url'] = $arr['url'];
+            //自定义采集字段
+            if($this->regular->mult_detail_field){
+                $this->_parseMultField($this->regular->mult_detail_field,'detail');
+            }
 
-        //自定义采集字段
-        if($this->regular->mult_detail_field){
-            $this->_parseMultField($this->regular->mult_detail_field,'detail');
-        }
-
-        //解析PHP代码
-        if($this->regular->mult_content){
-            $this->_parseMultContent();
+            //解析PHP代码
+            if($this->regular->mult_content){
+                $this->_parseMultContent();
+            }
         }
 
         if($this->test){
