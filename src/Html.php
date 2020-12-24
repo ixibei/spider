@@ -216,7 +216,7 @@ class Html extends Base
                 $fileName = 'Code'.$this->regular->id.$key;
                 $parsePhpCode->code($val['code'],$fileName);
                 $filePath = __DIR__.'/Cache/'.$fileName.'.php';
-                require($filePath);
+                require_once($filePath);
                 $mod = new $fileName($this->data);
                 $contents = $mod->regular($this->data['content'.$key]);
                 $this->data['multContent'] = array_merge($this->data['multContent'],$contents);
@@ -315,7 +315,7 @@ class Html extends Base
                 $fileName = 'Field'.ucfirst($type).$this->regular->id.$key;
                 $parsePhpCode->code($val->code,$fileName);
                 $filePath = __DIR__.'/Cache/'.$fileName.'.php';
-                require($filePath);
+                require_once($filePath);
                 $mod = new $fileName($this->data);
                 $contents = $mod->regular($this->data['multContent'][$val->name]);
                 $this->data['multContent'][$val->name] = $contents;
