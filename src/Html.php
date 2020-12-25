@@ -577,7 +577,7 @@ class Html extends Base
      * @param $url
      * @return mixed
      */
-    public function traceUrl($url)
+    public function traceUrl($url,$refer = '')
     {
         if(strpos($url,'http') === false){
             return $url;
@@ -595,10 +595,11 @@ class Html extends Base
             return $url;
         }
 
+        $refer = $refer ? $refer : (isset($this->data['url']) ? $this->data['url'] : '');
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_TIMEOUT, 6);
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_REFERER, $this->data['url']);//模拟来路
+        curl_setopt($ch, CURLOPT_REFERER, $refer);//模拟来路
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.26 Safari/537.36 Core/1.63.5967.400 LBBROWSER/10.1.3622.400');
         curl_setopt($ch, CURLOPT_NOBODY, true);// 不需要页面内容
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);// 不直接输出
