@@ -38,6 +38,9 @@ class Html extends Base
             require_once($filePath);
             $mod = new $fileName($this->data);
             $return = $mod->regular($this->content);
+            if($this->test){
+                dd($return);
+            }
         } else { //标准采集
             $this->dom = new simple_html_dom($this->content);
             $listObj = $this->analyticRule($this->regular->list,$this->dom);
