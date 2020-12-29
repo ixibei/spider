@@ -579,6 +579,7 @@ class Html extends Base
      */
     public function traceUrl($url,$refer = '')
     {
+        $url = htmlspecialchars_decode($url);
         if(strpos($url,'http') === false){
             return $url;
         }
