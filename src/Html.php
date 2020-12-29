@@ -28,53 +28,65 @@ class Html extends Base
             $this->content = $this->_replace($this->content,$this->regular->html_replace);
         }
 
-        $this->dom = new simple_html_dom($this->content);
-        $listObj = $this->analyticRule($this->regular->list,$this->dom);
-        if(!$listObj){
-            return $listObj;
-        }
-
-        $circle = $listObj->find($this->regular->list_cricle);
-        if(!$circle){
-            return $this->_parseError('列表页循环标识未找到 '.$this->regular->list_cricle);
-        }
-
         $return = [];
-        foreach($circle as $key=>$val){
-            $tmpArr = [];
 
-            //详情页内容url 有些变态的网站就是循环的a标签 所以加此判断
-            if($val->href){
-                $detailLinkObj = $val;
-            } else {
-                $detailLinkObj = $this->analyticRule($this->regular->list_url,$val);
-                if(!$detailLinkObj){
-                    continue;
-                }
+        if(isset($this->regular->list_ruku) && $this->regular->list_ruku && $this->regular->detail_replace){ //自定义程序采集
+            $parsePhpCode = new ParsePhpCode();
+            $fileName = 'SelfCode'.$this->regular->id;
+            $parsePhpCode->code($this->regular->detail_replace,$fileName);
+            $filePath = __DIR__.'/Cache/'.$fileName.'.php';
+            require_once($filePath);
+            $mod = new $fileName($this->data);
+            $return = $mod->regular($this->content);
+        } else { //标准采集
+            $this->dom = new simple_html_dom($this->content);
+            $listObj = $this->analyticRule($this->regular->list,$this->dom);
+            if(!$listObj){
+                return $listObj;
             }
 
-            //详情页url
-            $tmpArr['url'] = strpos($detailLinkObj->href,'http') === false ? $this->regular->url.'/'.ltrim($detailLinkObj->href,'/') : $detailLinkObj->href;//防止使用相对路径
-
-            //多字段采集
-            if($this->regular->mult_list_field){
-                $this->dom = $val;
-                $this->_parseMultField($this->regular->mult_list_field,'list');
-                if(isset($this->data['multContent']) && $this->data['multContent']){
-                    $tmpArr = array_merge($tmpArr,$this->data['multContent']);
-                }
+            $circle = $listObj->find($this->regular->list_cricle);
+            if(!$circle){
+                return $this->_parseError('列表页循环标识未找到 '.$this->regular->list_cricle);
             }
 
-            //测试模式则判断是否有指定连接测试
-            if($this->test){
-                if($this->regular->assign_url){
-                    $tmpArr['url'] = $this->regular->assign_url;
+            foreach($circle as $key=>$val){
+                $tmpArr = [];
+
+                //详情页内容url 有些变态的网站就是循环的a标签 所以加此判断
+                if($val->href){
+                    $detailLinkObj = $val;
+                } else {
+                    $detailLinkObj = $this->analyticRule($this->regular->list_url,$val);
+                    if(!$detailLinkObj){
+                        continue;
+                    }
                 }
-                return $this->getHtmlDetail($tmpArr);
-            } else{
-                $return[] = $tmpArr;
+
+                //详情页url
+                $tmpArr['url'] = strpos($detailLinkObj->href,'http') === false ? $this->regular->url.'/'.ltrim($detailLinkObj->href,'/') : $detailLinkObj->href;//防止使用相对路径
+
+                //多字段采集
+                if($this->regular->mult_list_field){
+                    $this->dom = $val;
+                    $this->_parseMultField($this->regular->mult_list_field,'list');
+                    if(isset($this->data['multContent']) && $this->data['multContent']){
+                        $tmpArr = array_merge($tmpArr,$this->data['multContent']);
+                    }
+                }
+
+                //测试模式则判断是否有指定连接测试
+                if($this->test){
+                    if($this->regular->assign_url){
+                        $tmpArr['url'] = $this->regular->assign_url;
+                    }
+                    return $this->getHtmlDetail($tmpArr);
+                } else{
+                    $return[] = $tmpArr;
+                }
             }
         }
+
         return $return;
     }
 
