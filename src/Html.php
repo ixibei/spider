@@ -547,7 +547,7 @@ class Html extends Base
     public function _cutEndStartPos($content,$endPos,$startPos)
     {
         //开始的截取位置 舍去此位置前内容
-        $startPos = array_filter(explode('-|-',$startPos));
+        $startPos = array_filter(explode('||',$startPos));
         if(is_array($startPos) && $startPos){
             foreach ($startPos as $key=>$val){
                 $pos = mb_stripos($content,$val);
@@ -559,7 +559,7 @@ class Html extends Base
             }
         }
         //最后的截取位置 舍去此位置后内容
-        $endPos = array_filter(explode('-|-',$endPos));
+        $endPos = array_filter(explode('||',$endPos));
         if(is_array($endPos) && $endPos){
             foreach ($endPos as $key=>$val){
                 $pos = mb_stripos($content,$val);
