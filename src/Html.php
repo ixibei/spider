@@ -54,6 +54,9 @@ class Html extends Base
             }
 
             foreach($circle as $key=>$val){
+                if(isset($this->regular->list_cricle_skip) && $this->regular->list_cricle_skip == $key){
+                    continue;
+                }
                 $tmpArr = [];
 
                 //详情页内容url 有些变态的网站就是循环的a标签 所以加此判断
