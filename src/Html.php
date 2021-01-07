@@ -54,7 +54,7 @@ class Html extends Base
             }
 
             foreach($circle as $key=>$val){
-                if(isset($this->regular->list_cricle_skip) && $this->regular->list_cricle_skip === $key){
+                if(isset($this->regular->list_cricle_skip) && $this->regular->list_cricle_skip == $key){
                     continue;
                 }
                 $tmpArr = [];
