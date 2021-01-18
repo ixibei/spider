@@ -328,7 +328,7 @@ class Html extends Base
                 $this->data['multContent'][$val->name] = $this->htmlpurifier($this->data['multContent'][$val->name],$stripTags,false);
             }
             if(isset($val->trim) && $val->trim){
-                $this->data['multContent'][$val->name] = preg_replace('/(^(　| )+|(　| )+$)/','',$this->data['multContent'][$val->name]);
+                $this->data['multContent'][$val->name] = preg_replace('/(^(　| |\xC2\xA0)+|(　| |\xC2\xA0)+$)/','',$this->data['multContent'][$val->name]);
             }
             //解析PHP代码
             if(isset($val->code) && $val->code){
