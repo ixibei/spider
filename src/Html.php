@@ -336,6 +336,9 @@ class Html extends Base
             if(isset($val->suffix) && $val->suffix){
                 $this->data['multContent'][$val->name] .= $val->suffix;
             }
+            if(isset($val->cover) && $val->cover){
+                $this->data['multContent'][$val->name] = $val->cover;
+            }
             //解析PHP代码
             if(isset($val->code) && $val->code){
                 $parsePhpCode = new ParsePhpCode();
