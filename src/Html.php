@@ -147,12 +147,12 @@ class Html extends Base
             $this->data['content'] = $this->_replace($this->data['content']);
 
             //需要禁止标签里的标签里的内容 或者 需要禁止内容中的class 或者是id
-            $forbidElement = array_filter(explode(' ',$this->regular->detail_forbid_tag));
+            $forbidElement = array_filter(explode('&&',$this->regular->detail_forbid_tag));
             $this->data['content'] = $this->forbidClassAndTag($forbidElement,$this->data['content']);
 
             $stripTags = [];
             if($this->regular->strip_tags){
-                $stripTags = explode(' ',$this->regular->strip_tags);
+                $stripTags = explode('&&',$this->regular->strip_tags);
             }
             $this->data['content'] = $this->htmlpurifier($this->data['content'],$stripTags);//去除乱七八糟的标签 链接
 
@@ -203,7 +203,7 @@ class Html extends Base
      */
     private function _parseMultMark($dom,$element)
     {
-        $mark = explode('|',$element);
+        $mark = explode('||',$element);
         $obj = false;//返回的对象
         if($mark){
             foreach ($mark as $key=>$val){
@@ -319,12 +319,12 @@ class Html extends Base
             }
             //去除指定的标签内容
             if($val->forbid_tags){
-                $forbidElement = array_filter(explode(' ',$val->forbid_tags));
+                $forbidElement = array_filter(explode('&&',$val->forbid_tags));
                 $this->data['multContent'][$val->name] = $this->forbidClassAndTag($forbidElement,$this->data['multContent'][$val->name]);
             }
             //去除标签
             if($val->strip_tags){
-                $stripTags = explode(' ',$val->strip_tags);
+                $stripTags = explode('&&',$val->strip_tags);
                 $this->data['multContent'][$val->name] = $this->htmlpurifier($this->data['multContent'][$val->name],$stripTags,false);
             }
             if(isset($val->trim) && $val->trim){
