@@ -347,6 +347,9 @@ class Html extends Base
             if(isset($val->cover) && $val->cover){
                 $this->data['multContent'][$val->name] = $val->cover;
             }
+            if(isset($val->trace_url) && $val->trace_url){
+                $this->data['multContent'][$val->name] = $this->traceUrl($this->data['multContent'][$val->name]);
+            }
             //解析PHP代码
             if(isset($val->code) && $val->code){
                 $parsePhpCode = new ParsePhpCode();
