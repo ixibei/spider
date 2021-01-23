@@ -150,11 +150,15 @@ class Html extends Base
             $forbidElement = array_filter(explode('&&',$this->regular->detail_forbid_tag));
             $this->data['content'] = $this->forbidClassAndTag($forbidElement,$this->data['content']);
 
-            $stripTags = [];
-            if($this->regular->strip_tags){
-                $stripTags = explode('&&',$this->regular->strip_tags);
+            if($this->regular->strip_tags == 'all'){
+                $this->data['content'] = strip_tags($this->data['content']);
+            } else {
+                $stripTags = [];
+                if($this->regular->strip_tags){
+                    $stripTags = explode('&&',$this->regular->strip_tags);
+                }
+                $this->data['content'] = $this->htmlpurifier($this->data['content'],$stripTags);//去除乱七八糟的标签 链接
             }
-            $this->data['content'] = $this->htmlpurifier($this->data['content'],$stripTags);//去除乱七八糟的标签 链接
 
             //将分页符替换成 本站需要的分页符
             $this->data['content'] = str_replace('$$$$','<hr/>',$this->data['content']);
@@ -324,8 +328,12 @@ class Html extends Base
             }
             //去除标签
             if($val->strip_tags){
-                $stripTags = explode('&&',$val->strip_tags);
-                $this->data['multContent'][$val->name] = $this->htmlpurifier($this->data['multContent'][$val->name],$stripTags,false);
+                if($val->strip_tags == 'all'){
+                    $this->data['multContent'][$val->name] = strip_tags($this->data['multContent'][$val->name]);
+                } else {
+                    $stripTags = explode('&&',$val->strip_tags);
+                    $this->data['multContent'][$val->name] = $this->htmlpurifier($this->data['multContent'][$val->name],$stripTags,false);
+                }
             }
             if(isset($val->trim) && $val->trim){
                 $this->data['multContent'][$val->name] = preg_replace('/(^(　| |\xC2\xA0|&nbsp;)+|(　| |\xC2\xA0|&nbsp;)+$)/','',$this->data['multContent'][$val->name]);
