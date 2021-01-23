@@ -646,6 +646,41 @@ class Html extends Base
         curl_exec($ch);
         $info = curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);
         curl_close($ch);
+        if($info == $url){
+            $info = $this->getLocation($info);
+        }
         return $info;
+    }
+
+    /**
+     * @param $url 通过get_headers函数判断url最终302的地址
+     * @return mixed
+     */
+    public function getLocation($url)
+    {
+        if(strpos($url,'.apk') !== false || strpos($url,'apple.com') !== false){
+            return $url;
+        }
+        stream_context_set_default( [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+            ],
+        ]);
+        $header = get_headers($url,1);
+        if(isset($header['Location'])){
+            $location = $header['Location'];
+            if(is_array($location)){
+                foreach($location as $key=>$val){
+                    if(strpos($val,'.apk') !== false){
+                        return $val;
+                        break;
+                    }
+                }
+                return $location[0];
+            }
+            return $location;
+        }
+        return $url;
     }
 }
