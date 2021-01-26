@@ -312,6 +312,9 @@ class Html extends Base
             }
             $attr = $val->val;
             $this->data['multContent'][$val->name] = trim($obj->$attr);
+            if(isset($val->trace_url) && $val->trace_url){
+                $this->data['multContent'][$val->name] = $this->traceUrl($this->data['multContent'][$val->name]);
+            }
             //前后位置截取
             if($val->end_pos || $val->start_pos){
                 $this->data['multContent'][$val->name] = $this->_cutEndStartPos($this->data['multContent'][$val->name],$val->end_pos,$val->start_pos);
@@ -346,9 +349,6 @@ class Html extends Base
             }
             if(isset($val->cover) && $val->cover){
                 $this->data['multContent'][$val->name] = $val->cover;
-            }
-            if(isset($val->trace_url) && $val->trace_url){
-                $this->data['multContent'][$val->name] = $this->traceUrl($this->data['multContent'][$val->name]);
             }
             //解析PHP代码
             if(isset($val->code) && $val->code){
