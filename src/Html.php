@@ -28,7 +28,7 @@ class Html extends Base
             $this->content = $this->_replace($this->content,$this->regular->html_replace);
         }
 
-        if(isset($this->regular->print_html) && $this->regular->print_html){
+        if(isset($this->regular->print_list_html) && $this->regular->print_list_html){
             dd($this->content);
         }
 
@@ -119,6 +119,10 @@ class Html extends Base
 
             if($this->regular->html_replace){
                 $content = $this->_replace($content,$this->regular->html_replace);
+            }
+
+            if(isset($this->regular->print_detail_html) && $this->regular->print_detail_html){
+                dd($this->content);
             }
 
             $this->dom = new simple_html_dom($content);
