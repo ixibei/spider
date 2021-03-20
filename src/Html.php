@@ -31,7 +31,7 @@ class Html extends Base
 
         //打印列表html
         if(isset($this->regular->print_list_html) && $this->regular->print_list_html){
-            dd($this->content);
+            echo '<xmp>'.$this->content.'</xmp>';exit;
         }
 
         $return = [];
@@ -126,7 +126,7 @@ class Html extends Base
 
             //打印详情页html
             if(isset($this->regular->print_detail_html) && $this->regular->print_detail_html){
-                dd($content);
+                echo '<xmp>'.$content.'</xmp>';exit;
             }
 
             $this->dom = new simple_html_dom($content);
