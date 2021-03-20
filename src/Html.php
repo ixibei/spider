@@ -24,10 +24,12 @@ class Html extends Base
             return $this->_parseError('can\'t connect this url');
         }
 
+        //全局替换
         if($this->regular->html_replace){
             $this->content = $this->_replace($this->content,$this->regular->html_replace);
         }
 
+        //打印列表html
         if(isset($this->regular->print_list_html) && $this->regular->print_list_html){
             dd($this->content);
         }
@@ -117,12 +119,14 @@ class Html extends Base
                 return false;
             }
 
+            //全局替换
             if($this->regular->html_replace){
                 $content = $this->_replace($content,$this->regular->html_replace);
             }
 
+            //打印详情页html
             if(isset($this->regular->print_detail_html) && $this->regular->print_detail_html){
-                dd($this->content);
+                dd($content);
             }
 
             $this->dom = new simple_html_dom($content);
