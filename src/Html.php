@@ -28,6 +28,10 @@ class Html extends Base
             $this->content = $this->_replace($this->content,$this->regular->html_replace);
         }
 
+        if(isset($this->regular->print_html) && $this->regular->print_html){
+            dd($this->content);
+        }
+
         $return = [];
 
         if(isset($this->regular->list_ruku) && $this->regular->list_ruku && $this->regular->detail_replace){ //自定义程序采集
