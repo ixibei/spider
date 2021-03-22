@@ -31,7 +31,7 @@ class Html extends Base
 
         //打印列表html
         if(isset($this->regular->print_list_html) && $this->regular->print_list_html){
-            echo $this->url.'<br/>';
+            $this->printMess($this->regular->name,$this->url);
             echo '<xmp>'.$this->content.'</xmp>';exit;
         }
 
@@ -127,7 +127,7 @@ class Html extends Base
 
             //打印详情页html
             if(isset($this->regular->print_detail_html) && $this->regular->print_detail_html){
-                echo $this->url.'<br/>';
+                $this->printMess($this->regular->name,$this->url);
                 echo '<xmp>'.$content.'</xmp>';exit;
             }
 
@@ -198,19 +198,24 @@ class Html extends Base
             if($this->json_test){
                 echo json_encode($this->data,JSON_UNESCAPED_UNICODE );
             } else{
-                echo  '<title>'.$this->regular->name.'</title><pre>';
-                $this->data['url'] = '<span style="color:blue;cursor: pointer;" class="copyUrl" data-clipboard-text="'.$this->data['url'].'" onclick="copyFromUrl(\'copyUrl\')" >'.$this->data['url'].'</span>';
+                $this->printMess($this->regular->name,$this->url);
                 print_r($this->data);
-                echo '<script>';
-                echo file_get_contents(__DIR__.'/js/jquery.js');
-                echo file_get_contents(__DIR__.'/js/clipboard.min.js');
-                echo file_get_contents(__DIR__.'/js/function.js');
-                echo '</script>';
             }
             exit;
         } else {
             return $this->data;
         }
+    }
+
+    public function printMess($name,$url)
+    {
+        echo '<title>'.$name.'</title><pre>';
+        echo '<b style="color: red;">[ URL ]：</b><span style="color:blue;cursor: pointer;" class="copyUrl" data-clipboard-text="'.$url.'" onclick="copyFromUrl(\'copyUrl\')" >'.$url.'</span><br/><br/>';
+        echo '<script>';
+        echo file_get_contents(__DIR__.'/js/jquery.js');
+        echo file_get_contents(__DIR__.'/js/clipboard.min.js');
+        echo file_get_contents(__DIR__.'/js/function.js');
+        echo '</script>';
     }
 
     /**

@@ -36,7 +36,7 @@ class Base
         if(!$this->regular){
             $str = $msg;
         } else {
-            $str = 'ERROR-'.$this->errorTimes.' -- <b style="color: red;">[ MES ]:</b> '.$msg.' <b style="color: red;">[ URL ]:</b> '.$this->url.'<br>';
+            $str = 'ERROR-'.$this->errorTimes.' -- <b style="color: red;">[ MES ]：</b> '.$msg.' <b style="color: red;">[ URL ]：</b> '.$this->url.'<br>';
         }
 
         if($this->test){
