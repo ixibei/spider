@@ -31,8 +31,7 @@ class Html extends Base
 
         //打印列表html
         if(isset($this->regular->print_list_html) && $this->regular->print_list_html){
-            $this->printMess($this->regular->name,$this->url);
-            echo '<xmp>'.$this->content.'</xmp>';exit;
+            $this->printMess($this->regular->name,$this->url,'<xmp>'.$this->content.'</xmp>');
         }
 
         $return = [];
@@ -127,8 +126,7 @@ class Html extends Base
 
             //打印详情页html
             if(isset($this->regular->print_detail_html) && $this->regular->print_detail_html){
-                $this->printMess($this->regular->name,$this->url);
-                echo '<xmp>'.$content.'</xmp>';exit;
+                $this->printMess($this->regular->name,$this->url,"<xmp>".$content.'</xmp>');
             }
 
             $this->dom = new simple_html_dom($content);
@@ -198,8 +196,7 @@ class Html extends Base
             if($this->json_test){
                 echo json_encode($this->data,JSON_UNESCAPED_UNICODE );
             } else{
-                $this->printMess($this->regular->name,$this->url);
-                print_r($this->data);
+                $this->printMess($this->regular->name,$this->url,$this->data);
             }
             exit;
         } else {
@@ -207,10 +204,15 @@ class Html extends Base
         }
     }
 
-    public function printMess($name,$url)
+    public function printMess($name,$url,$data)
     {
         echo '<title>'.$name.'</title><pre>';
-        echo '<b style="color: red;">[ URL ]：</b><span style="color:blue;cursor: pointer;" class="copyUrl" data-clipboard-text="'.$url.'" onclick="copyFromUrl(\'copyUrl\')" >'.$url.'</span><br/><br/>';
+        echo '<b style="color: red;">[ URL ]：</b><span style="color:blue;cursor: pointer;" class="copyUrl" data-clipboard-text="'.$url.'" onclick="copyFromUrl(\'copyUrl\')" >'.$url.'</span>'."\r\n";
+        if(is_array($data)){
+            print_r($data);
+        } else{
+            echo $data;
+        }
         echo '<script>';
         echo file_get_contents(__DIR__.'/js/jquery.js');
         echo file_get_contents(__DIR__.'/js/clipboard.min.js');
