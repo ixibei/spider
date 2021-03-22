@@ -96,7 +96,7 @@ class Base
 
     /**
      * 获取网页内容
-     * @param $url 网站url
+     * @param $url 网站url 可以让其他程序自由调取该函数
      * @param string $encoding 网站编码
      * @param bool $urlAddParam 是否在访问url得时候加上参数
      * @param bool $isProxy 是否代理
@@ -114,6 +114,7 @@ class Base
                 $url .= '?s='.mt_rand(0,1000);
             }
         }
+        $this->url = $url;//为了输出打印，URL而赋值
 
         $cip = '220.181.108.'.mt_rand(0,254);
         $xip = '220.181.32.'.mt_rand(0,254);
