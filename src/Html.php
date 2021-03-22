@@ -180,6 +180,8 @@ class Html extends Base
             $this->data['content'] = $this->_addTagsAttribute($this->data['content']);
             //替换内容中不需要的词语 第二次替换
             $this->data['content'] = $this->_replace($this->data['content']);
+            //去除内容中的首尾空格
+            $this->data['content'] = trim($this->data['content']);
 
             //自定义采集字段
             if($this->regular->mult_detail_field){
