@@ -162,14 +162,16 @@ class Html extends Base
             $forbidElement = array_filter(explode('&&',$this->regular->detail_forbid_tag));
             $this->data['content'] = $this->forbidClassAndTag($forbidElement,$this->data['content']);
 
-            if($this->regular->strip_tags == 'all'){
-                $this->data['content'] = strip_tags($this->data['content']);
-            } else {
-                $stripTags = [];
-                if($this->regular->strip_tags){
-                    $stripTags = explode('&&',$this->regular->strip_tags);
+            if(!isset($this->regular->no_strip_tags) || $this->regular->no_strip_tags != 1){
+                if($this->regular->strip_tags == 'all'){
+                    $this->data['content'] = strip_tags($this->data['content']);
+                } else {
+                    $stripTags = [];
+                    if($this->regular->strip_tags){
+                        $stripTags = explode('&&',$this->regular->strip_tags);
+                    }
+                    $this->data['content'] = $this->htmlpurifier($this->data['content'],$stripTags);//去除乱七八糟的标签 链接
                 }
-                $this->data['content'] = $this->htmlpurifier($this->data['content'],$stripTags);//去除乱七八糟的标签 链接
             }
 
             //将分页符替换成 本站需要的分页符

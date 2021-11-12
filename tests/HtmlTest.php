@@ -35,6 +35,7 @@ $collectConfig = [
         'detail_page'       =>  'div.page1[0]',//详情页分页标识
         'detail_forbid_tag' =>  'div',//禁止的标签 以多个空格分割
         'strip_tags'        =>  '',//需要移除的标签 以多个空格分割
+        'no_strip_tags'     =>  0,//不去除标签样式
         'print_detail_html' =>  0,//是否打印列表页面，用于测试
         'review'            =>  '0',//是否需要审核 0 无需审核直接发布 1 审核发布
         'detail_replace'    =>  '免责声明：以上内容源自网络，版权归原作者所有，如有侵犯您的原创版权请告知，我们将尽快删除相关内容。',//要替换的关键词
