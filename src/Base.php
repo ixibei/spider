@@ -233,8 +233,7 @@ class Base
 
     public function getProxyIp()
     {
-        $cache = new Cache();
-        $ipMess = $cache->get('proxy_ip');
+        $ipMess = Cache::get('proxy_ip');
         if($ipMess){
             return $ipMess;
         } else {
@@ -247,7 +246,7 @@ class Base
                 $arr = explode(":",$mess);
                 $jsonArr = ['ip'=>$arr[0],'port'=>$arr[1]];
                 $json = json_encode($jsonArr);
-                $cache->set('proxy_ip',$json,60);
+                Cache::set('proxy_ip',$json,60);
                 return $json;
             }
             return false;
