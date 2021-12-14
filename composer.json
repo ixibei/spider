@@ -17,7 +17,7 @@
     "php": ">=5.5.9",
     "monolog/monolog": "~1.11",
     "ezyang/htmlpurifier": "4.9.*",
-    "psr/simple-cache": "1.0.1"
+    "illuminate/cache": "5.1.2"
   },
 
   "require-dev":{

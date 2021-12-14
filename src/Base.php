@@ -8,6 +8,7 @@ use HTMLPurifier_Config,HTMLPurifier;
 use DB;
 use Log;
 use JonnyW\PhantomJs\Client;
+use Illuminate\Support\Facades\Cache;
 
 class Base
 {
@@ -106,6 +107,8 @@ class Base
      */
     public function getContent($url, $encoding = 'utf-8',$urlAddParam = true,$isProxy = false,$httpRefer = false,$loadJs = false)
     {
+        $cache = new Cache();
+
         $url = html_entity_decode($url);
         if($urlAddParam){
             if(strpos($url,'?') !== false){
