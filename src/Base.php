@@ -139,7 +139,7 @@ class Base
                 }
                 $response = $curl
                     ->cookies(array('JSESSIONID' => 'constant-session-1'))
-                    ->setHeader('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/600.4.10 (KHTML, like Gecko) Version/8.0.4 Safari/600.4.10')
+                    ->setHeader('User-Agent', 'Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)')
                     ->setHeader('CLIENT-IP',$cip)//模拟请求ip
                     ->setHeader('X-FORWARDED-FOR',$xip)//模拟请求ip
                     ->get($url);
