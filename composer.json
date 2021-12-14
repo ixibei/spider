@@ -16,8 +16,7 @@
   "require":{
     "php": ">=5.5.9",
     "monolog/monolog": "~1.11",
-    "ezyang/htmlpurifier": "4.9.*",
-    "illuminate/cache": "5.1.2"
+    "ezyang/htmlpurifier": "4.9.*"
   },
 
   "require-dev":{

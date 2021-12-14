@@ -8,7 +8,7 @@ use HTMLPurifier_Config,HTMLPurifier;
 use DB;
 use Log;
 use JonnyW\PhantomJs\Client;
-use Illuminate\Support\Facades\Cache;
+use Cache;
 
 class Base
 {
