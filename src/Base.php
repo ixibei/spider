@@ -232,7 +232,8 @@ class Base
 
     public function getProxyIp()
     {
-        $ip = DB::table('system')->where('key','PROXY_IP')->pluck('value');
+        $ip = DB::table('system')->where('key','PROXY_IP')->first();
+        $ip = $ip->value;
         if($ip){
             $proxyIps = array_filter(explode("\r\n",$ip));
             $countProxyIps = count($proxyIps);
