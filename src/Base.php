@@ -107,8 +107,6 @@ class Base
      */
     public function getContent($url, $encoding = 'utf-8',$urlAddParam = true,$isProxy = false,$httpRefer = false,$loadJs = false)
     {
-        $cache = new Cache();
-
         $url = html_entity_decode($url);
         if($urlAddParam){
             if(strpos($url,'?') !== false){
@@ -235,22 +233,25 @@ class Base
 
     public function getProxyIp()
     {
-        $ip = DB::table('system')->where('key','PROXY_IP')->first();
-        $ip = $ip->value;
-        if($ip){
-            $proxyIps = array_filter(explode("\r\n",$ip));
-            $countProxyIps = count($proxyIps);
-            $myIp = $proxyIps[mt_rand(0,$countProxyIps-1)];
-            $myIps = explode(' ',$myIp);
-            if(count($myIps) < 2){
-                return false;
+        $cache = new Cache();
+        $ipMess = $cache->get('proxy_ip');
+        if($ipMess){
+            return $ipMess;
+        } else {
+            $interface = DB::table('system')->where('key','PROXY_IP')->first();
+            $interface = $interface->value;
+            if($interface){
+                $ips = file_get_contents($interface);
+                $arr = explode("\r\n",$ips);
+                $mess = $arr[0];
+                $arr = explode(":",$mess);
+                $jsonArr = ['ip'=>$arr[0],'port'=>$arr[1]];
+                $json = json_encode($jsonArr);
+                $cache->set('proxy_ip',$json,60);
+                return $json;
             }
-            $myIps[2] = isset($myIps[2]) ? $myIps[2] : CURLPROXY_SOCKS5;
-            $myIps[3] = isset($myIps[3]) ? $myIps[3] : '';
-            $myIps[4] = isset($myIps[4]) ? $myIps[4] : '';
-            return $myIps;
+            return false;
         }
-        return false;
     }
 
     /**
