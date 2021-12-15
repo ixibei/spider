@@ -255,7 +255,7 @@ class Base
                         $proxyIp = json_encode($jsonArr);
                         Cache::set('spider:proxy:ip',$proxyIp,$deadline);
                         $filePath = __DIR__.'/Cache/proxy.txt';
-                        file_put_contents($filePath,date('Y-m-d H:i:s').' : '.$proxyIp,FILE_APPEND);
+                        file_put_contents($filePath,date('Y-m-d H:i:s').' : '.$proxyIp."\r\n",FILE_APPEND);
                         break;
                     }
                 }
