@@ -241,15 +241,19 @@ class Base
             $interface = DB::table('system')->where('key','PROXY_IP')->first();
             $interface = $interface->value;
             if($interface){
-                $ips = file_get_contents($interface);
+                $interfaces = explode("\r\n",$interface);
+                $ips = file_get_contents($interfaces[0]);
+                $username = isset($interfaces[1]) ? $interfaces[1] : false;
+                $password = isset($interfaces[2]) ? $interfaces[2] : false;
+                $deadline = isset($interfaces[3]) ? $interfaces[3] : 60;
                 $arr = explode("\r\n",$ips);
                 foreach ($arr as $key=>$val){
                     $val = trim($val);
                     if($val && strpos($val,':') !== false){ //必须为xxx.xxx.xxx.xxx:port
                         $vals = explode(":",$val);
-                        $jsonArr = ['ip'=>$vals[0],'port'=>$vals[1],'socket'=>false,'username'=>false,'password'=>false];
+                        $jsonArr = ['ip'=>$vals[0],'port'=>$vals[1],'socket'=>false,'username'=>$username,'password'=>$password];
                         $proxyIp = json_encode($jsonArr);
-                        Cache::set('proxy_ip',$proxyIp,60);
+                        Cache::set('proxy_ip',$proxyIp,$deadline);
                         break;
                     }
                 }
