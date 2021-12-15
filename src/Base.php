@@ -244,6 +244,9 @@ class Base
                 $arr = explode("\r\n",$ips);
                 $mess = $arr[0];
                 $arr = explode(":",$mess);
+                if(count($arr) < 2){
+                    return false;
+                }
                 $jsonArr = ['ip'=>$arr[0],'port'=>$arr[1]];
                 $json = json_encode($jsonArr);
                 Cache::set('proxy_ip',$json,60);
