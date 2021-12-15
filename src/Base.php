@@ -234,27 +234,26 @@ class Base
 
     public function getProxyIp()
     {
-        $ipMess = Cache::get('proxy_ip');
-        if($ipMess){
-            return $ipMess;
+        $proxyIp = Cache::get('proxy_ip');
+        if($proxyIp){
+            return $proxyIp;
         } else {
             $interface = DB::table('system')->where('key','PROXY_IP')->first();
             $interface = $interface->value;
             if($interface){
                 $ips = file_get_contents($interface);
                 $arr = explode("\r\n",$ips);
-                $json = false;
                 foreach ($arr as $key=>$val){
                     $val = trim($val);
                     if($val && strpos($val,':') !== false){ //必须为xxx.xxx.xxx.xxx:port
                         $vals = explode(":",$val);
                         $jsonArr = ['ip'=>$vals[0],'port'=>$vals[1],'socket'=>false,'username'=>false,'password'=>false];
-                        $json = json_encode($jsonArr);
-                        Cache::set('proxy_ip',$json,60);
+                        $proxyIp = json_encode($jsonArr);
+                        Cache::set('proxy_ip',$proxyIp,60);
                         break;
                     }
                 }
-                return $json;
+                return $proxyIp;
             }
             return false;
         }
