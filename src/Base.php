@@ -130,9 +130,10 @@ class Base
         do {
             try {
                 if($isProxy && class_exists('DB')){
-                    $proxyIps = $this->getProxyIp();
-                    if($proxyIps){
-                        $curl->proxy($proxyIps[0],$proxyIps[1],$proxyIps[2],$proxyIps[3],$proxyIps[4]);
+                    $proxyIp = $this->getProxyIp();
+                    if($proxyIp){
+                        $proxyIp = json_decode($proxyIp);
+                        $curl->proxy($proxyIp->ip,$proxyIp->port,$proxyIp->socket,$proxyIp->username,$proxyIp->password);
                     }
                 }
                 if($httpRefer){
@@ -247,7 +248,7 @@ class Base
                     $val = trim($val);
                     if($val && strpos($val,':') !== false){ //必须为xxx.xxx.xxx.xxx:port
                         $vals = explode(":",$val);
-                        $jsonArr = ['ip'=>$vals[0],'port'=>$vals[1]];
+                        $jsonArr = ['ip'=>$vals[0],'port'=>$vals[1],'socket'=>false,'username'=>false,'password'=>false];
                         $json = json_encode($jsonArr);
                         Cache::set('proxy_ip',$json,60);
                         break;
