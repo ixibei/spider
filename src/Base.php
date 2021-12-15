@@ -234,7 +234,7 @@ class Base
 
     public function getProxyIp()
     {
-        $proxyIp = Cache::get('proxy_ip');
+        $proxyIp = Cache::get('spider:proxy:ip');
         if($proxyIp){
             return $proxyIp;
         } else {
@@ -253,7 +253,9 @@ class Base
                         $vals = explode(":",$val);
                         $jsonArr = ['ip'=>$vals[0],'port'=>$vals[1],'socket'=>false,'username'=>$username,'password'=>$password];
                         $proxyIp = json_encode($jsonArr);
-                        Cache::set('proxy_ip',$proxyIp,$deadline);
+                        Cache::set('spider:proxy:ip',$proxyIp,$deadline);
+                        $filePath = __DIR__.'/Cache/proxy.txt';
+                        file_put_contents($filePath,date('Y-m-d H:i:s').' : '.$proxyIp,FILE_APPEND);
                         break;
                     }
                 }
