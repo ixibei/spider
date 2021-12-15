@@ -242,14 +242,17 @@ class Base
             if($interface){
                 $ips = file_get_contents($interface);
                 $arr = explode("\r\n",$ips);
-                $mess = $arr[0];
-                $arr = explode(":",$mess);//必须为xxx.xxx.xxx.xxx:port
-                if(count($arr) < 2){
-                    return false;
+                $json = false;
+                foreach ($arr as $key=>$val){
+                    $val = trim($val);
+                    if($val && strpos($val,':') !== false){ //必须为xxx.xxx.xxx.xxx:port
+                        $vals = explode(":",$val);
+                        $jsonArr = ['ip'=>$vals[0],'port'=>$vals[1]];
+                        $json = json_encode($jsonArr);
+                        Cache::set('proxy_ip',$json,60);
+                        break;
+                    }
                 }
-                $jsonArr = ['ip'=>$arr[0],'port'=>$arr[1]];
-                $json = json_encode($jsonArr);
-                Cache::set('proxy_ip',$json,60);
                 return $json;
             }
             return false;
