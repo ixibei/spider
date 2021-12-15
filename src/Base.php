@@ -243,7 +243,7 @@ class Base
                 $ips = file_get_contents($interface);
                 $arr = explode("\r\n",$ips);
                 $mess = $arr[0];
-                $arr = explode(":",$mess);
+                $arr = explode(":",$mess);//必须为xxx.xxx.xxx.xxx:port
                 if(count($arr) < 2){
                     return false;
                 }
