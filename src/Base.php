@@ -110,9 +110,9 @@ class Base
         $url = html_entity_decode($url);
         if($urlAddParam){
             if(strpos($url,'?') !== false){
-                $url .= '&s='.mt_rand(0,1000);
+                $url .= '&cmt='.mt_rand(0,1000);
             } else {
-                $url .= '?s='.mt_rand(0,1000);
+                $url .= '?cmt='.mt_rand(0,1000);
             }
         }
         $this->url = $url;//为了输出打印，URL而赋值

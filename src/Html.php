@@ -147,7 +147,7 @@ class Html extends Base
                 $pagesObj = $this->analyticRule($this->regular->detail_page,$this->dom);
                 if($pagesObj){
                     $pageHtml = $pagesObj->innertext;
-                    $this->baseNum = self::_extractNum($this->url);//获取第一页原始数字
+                    $this->baseNum = $this->_extractNum($this->url);//获取第一页原始数字
                     $nextUrl = $this->_haveNextPage($pageHtml,$this->url);
                     if($nextUrl){
                         $this->_parsePage($nextUrl);
@@ -427,7 +427,7 @@ class Html extends Base
     private function _haveNextPage($html,$currentPage)
     {
         if(!$html) return false;
-        $currentNum = self::_extractNum($currentPage);//当前的页码
+        $currentNum = $this->_extractNum($currentPage);//当前的页码
         $dom = new simple_html_dom($html);
         $nextUrl = false;
         foreach($dom->find('a') as $val){
@@ -437,7 +437,7 @@ class Html extends Base
                 continue;
             }
             //如果链接中不是数字跳过
-            $num = self::_extractNum($href);
+            $num = $this->_extractNum($href);
             if(!$num){
                 continue;
             }
@@ -496,11 +496,16 @@ class Html extends Base
      * @param $string 要抽取的字符串
      * @return string
      */
-    private static function _extractNum($string)
+    private function _extractNum($string)
     {
         $strings = explode('/',$string);//取这个链接最后部分用于比较大小，会避免一些错误
         $string = array_pop($strings);
         $num = 0;
+        //屏蔽
+        if($this->regular->url_add_param){
+            $arr = explode('cmt=',$string);
+            $string = $arr[0];
+        }
         for($i=0;$i<strlen($string);$i++) {
             if (is_numeric($string[$i])) {
                 $num .= $string[$i];
