@@ -501,7 +501,7 @@ class Html extends Base
         $strings = explode('/',$string);//取这个链接最后部分用于比较大小，会避免一些错误
         $string = array_pop($strings);
         $num = 0;
-        //屏蔽
+        //如果开启了屏蔽cdn 会影响这里取得分页数字，所以需要提取一次
         if($this->regular->url_add_param){
             $arr = explode('cmt=',$string);
             $string = $arr[0];
