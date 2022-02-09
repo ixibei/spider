@@ -162,6 +162,13 @@ class Html extends Base
             $forbidElement = array_filter(explode('&&',$this->regular->detail_forbid_tag));
             $this->data['content'] = $this->forbidClassAndTag($forbidElement,$this->data['content']);
 
+            //保存第三方链接 不让其替换
+            $preg = '/<a .*?href=["|\'](.*?)["|\'].*?>(.*?)<\/a>/is';
+            $this->data['content'] = preg_replace($preg,'[link-$1](str-$2)',$this->data['content']);
+            //将站内链接替换回来，在接下来的处理中可能会被替换掉
+            $mainDomain = $this->getTopHost($this->url);
+            $this->data['content'] = preg_replace('/\[link\-(.*?)'.$mainDomain.'(.*?)\]\(str\-(.*?)\)/','<a href="$1$2" target="_blank">$3</a>',$this->data['content']);
+
             if(!isset($this->regular->no_strip_tags) || $this->regular->no_strip_tags != 1){
                 if($this->regular->strip_tags == 'all'){
                     $this->data['content'] = strip_tags($this->data['content']);
@@ -184,6 +191,8 @@ class Html extends Base
             $this->data['content'] = $this->_replace($this->data['content']);
             //去除内容中的首尾空格
             $this->data['content'] = trim($this->data['content']);
+            //把第三方链接替换回来
+            $this->data['content'] = preg_replace('/\[link\-(.*?)\]\(str\-(.*?)\)/','<a href="$1" target="_blank">$2</a>',$this->data['content']);
 
             //自定义采集字段
             if($this->regular->mult_detail_field){
@@ -206,6 +215,26 @@ class Html extends Base
         } else {
             return $this->data;
         }
+    }
+
+    //取出主域名
+    public function getTopHost($url){
+        $url = strtolower($url);  //首先转成小写
+        $hosts = parse_url($url);
+        $host = $hosts['host'];
+        //查看是几级域名
+        $data = explode('.', $host);
+        $n = count($data);
+        //判断是否是双后缀
+        $preg = '/[\w].+\.(com|net|org|gov|edu)\.cn$/';
+        if(($n > 2) && preg_match($preg,$host)){
+            //双后缀取后3位
+            $host = $data[$n-3].'.'.$data[$n-2].'.'.$data[$n-1];
+        }else{
+            //非双后缀取后两位
+            $host = $data[$n-2].'.'.$data[$n-1];
+        }
+        return $host;
     }
 
     public function printMess($name,$url,$data)
