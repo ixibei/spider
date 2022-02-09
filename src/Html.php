@@ -165,9 +165,17 @@ class Html extends Base
             //保存第三方链接 不让其替换
             $preg = '/<a .*?href=["|\'](.*?)["|\'].*?>(.*?)<\/a>/is';
             $this->data['content'] = preg_replace($preg,'[link-$1](str-$2)',$this->data['content']);
-            //将站内链接替换回来，在接下来的处理中可能会被替换掉
             $mainDomain = $this->getTopHost($this->url);
-            $this->data['content'] = preg_replace('/\[link\-(.*?)'.$mainDomain.'(.*?)\]\(str\-(.*?)\)/','<a href="$1$2" target="_blank">$3</a>',$this->data['content']);
+            preg_match_all('/\[link\-(.*?)\]\(str\-(.*?)\)/',$this->data['content'],$tmpArr);
+            if($tmpArr && isset($tmpArr[1])){
+                foreach($tmpArr[1] as $key=>$val){
+                    $isHttp = substr($val,0,4);
+                    if($isHttp == 'http' && strpos($val,$mainDomain) === false){
+                        continue;
+                    }
+                    $this->data['content'] = str_replace($tmpArr[0][$key],$tmpArr[2][$key],$this->data['content']);
+                }
+            }
 
             if(!isset($this->regular->no_strip_tags) || $this->regular->no_strip_tags != 1){
                 if($this->regular->strip_tags == 'all'){
