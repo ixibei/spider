@@ -164,9 +164,9 @@ class Html extends Base
 
             //保存第三方链接 不让其替换
             $preg = '/<a .*?href=["|\'](.*?)["|\'].*?>(.*?)<\/a>/is';
-            $this->data['content'] = preg_replace($preg,'[link-$1](str-$2)',$this->data['content']);
+            $this->data['content'] = preg_replace($preg,'[+$1+](+$2+)',$this->data['content']);
             $mainDomain = $this->getTopHost($this->url);
-            preg_match_all('/\[link\-(.*?)\]\(str\-(.*?)\)/',$this->data['content'],$tmpArr);
+            preg_match_all('/\[\+(.*?)\+\]\(\+(.*?)\+\)/',$this->data['content'],$tmpArr);
             if($tmpArr && isset($tmpArr[1])){
                 foreach($tmpArr[1] as $key=>$val){
                     $isHttp = substr($val,0,4);
@@ -200,7 +200,7 @@ class Html extends Base
             //去除内容中的首尾空格
             $this->data['content'] = trim($this->data['content']);
             //把第三方链接替换回来
-            $this->data['content'] = preg_replace('/\[link\-(.*?)\]\(str\-(.*?)\)/','<a href="$1" target="_blank">$2</a>',$this->data['content']);
+            $this->data['content'] = preg_replace('/\[\+(.*?)\+\]\(\+(.*?)\+\)/','<a href="$1" target="_blank">$2</a>',$this->data['content']);
 
             //自定义采集字段
             if($this->regular->mult_detail_field){
