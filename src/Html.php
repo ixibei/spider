@@ -563,7 +563,7 @@ class Html extends Base
         $contentObj = new simple_html_dom($content);
         foreach ($forbids as $val){
             foreach($contentObj->find($val) as $v){
-                $v->innertext = '';
+                $v->outertext = '';
             }
         }
         return $contentObj->innertext;
