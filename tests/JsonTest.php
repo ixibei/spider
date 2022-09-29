@@ -21,8 +21,9 @@ $collectConfig = [
         'urlPath'           =>  '',//详情页地址前缀(如完整链接无需填写)
         'name'              =>  'title',//文章标题
         'urlPathSuffix'     =>  '',//详情页地址后缀(如完整链接并且无需后缀无需填写)
+        'user_agent'        =>  false,//自定义用户请求头
         'test'              =>  false,//测试json格式是否标准，接下来方便书写
-        'url_add_param'     =>   true,//采集url是否添加参数
+        'url_add_param'     =>  true,//采集url是否添加参数
 
         //详情页面
         'detail_name'       =>  '0',//如果列表页不存在 文章标题 则使用此规则

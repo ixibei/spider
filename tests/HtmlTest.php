@@ -25,9 +25,10 @@ $collectConfig = [
         'load_js'           =>  1,//是否渲染页面
         'print_list_html'   =>  0,//是否打印列表页面，用于测试
         'assign_url'        =>  'http://www.qulishi.com/article/202011/460690.html',//指定链接测试
-        'url_add_param'     =>   true,//采集url是否添加参数
-        'is_proxy'          =>   false,//是否使用代理
-        'html_replace'      =>   '白起##spider',//多内容替换
+        'url_add_param'     =>  true,//采集url是否添加参数
+        'is_proxy'          =>  false,//是否使用代理
+        'user_agent'        =>  false,//自定义用户请求头
+        'html_replace'      =>  '白起##spider',//多内容替换
         'mult_list_field'   =>  '[{"name":"name","tags":"dt/a","val":"innertext","replace":"","end_pos":"","start_pos":"","forbid_tags":"","strip_tags":""},{"name":"img","tags":"dd/a/img","val":"src","replace":"责任编辑：","end_pos":"","start_pos":"","forbid_tags":"","strip_tags":""},{"name":"time","tags":"dd[1]/span","val":"innertext","replace":"","end_pos":"","start_pos":"","forbid_tags":"","strip_tags":""}]',//自定义采集字段
 
         //详情页面

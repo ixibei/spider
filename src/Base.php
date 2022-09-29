@@ -29,6 +29,8 @@ class Base
         $this->json_test = isset($param['json_test']) ? $param['json_test'] : false;
         $this->url = $param['url'];
         $this->regular = (object)$param['regular'];
+        $this->regular->load_js = isset($this->regular->load_js) ? $this->regular->load_js : false;
+        $this->regular->user_agent = isset($this->regular->user_agent) ? $this->regular->user_agent : false;
     }
 
     public function _parseError($msg)
@@ -103,9 +105,10 @@ class Base
      * @param bool $isProxy 是否代理
      * @param bool $httpRefer 是否指定httpRefer
      * @param bool $loadJs 是否加载js效果
+     * @param bool $userAgent 指定用户请求头
      * @return string
      */
-    public function getContent($url, $encoding = 'utf-8',$urlAddParam = true,$isProxy = false,$httpRefer = false,$loadJs = false)
+    public function getContent($url, $encoding = 'utf-8',$urlAddParam = true,$isProxy = false,$httpRefer = false,$loadJs = false,$userAgent = false)
     {
         $url = html_entity_decode($url);
         if($urlAddParam){
@@ -139,9 +142,10 @@ class Base
                 if($httpRefer){
                     $curl->setHeader('CURLOPT_REFERER',$httpRefer);
                 }
+                $userAgent = $userAgent ?  'Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)' : $userAgent;
                 $response = $curl
                     ->cookies(array('JSESSIONID' => 'constant-session-1'))
-                    ->setHeader('User-Agent', 'Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)')
+                    ->setHeader('User-Agent', $userAgent)
                     ->setHeader('CLIENT-IP',$cip)//模拟请求ip
                     ->setHeader('X-FORWARDED-FOR',$xip)//模拟请求ip
                     ->get($url);

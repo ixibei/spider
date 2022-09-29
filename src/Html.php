@@ -18,8 +18,7 @@ class Html extends Base
      */
     public function getHtmlList()
     {
-        $this->regular->load_js = isset($this->regular->load_js) ? $this->regular->load_js : false;
-        $this->content = $this->getContent($this->url,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,$this->url,$this->regular->load_js);
+        $this->content = $this->getContent($this->url,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,$this->url,$this->regular->load_js,$this->regular->user_agent);
         if(!$this->content){
             return $this->_parseError('can\'t connect this url');
         }
@@ -113,8 +112,7 @@ class Html extends Base
         $this->url = trim($arr['url']);
         //直接入库模式
         if(!isset($this->regular->list_ruku) || !$this->regular->list_ruku){
-            $this->regular->load_js = isset($this->regular->load_js) ? $this->regular->load_js : false;
-            $content = $this->getContent($this->url,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,$this->url,$this->regular->load_js);
+            $content = $this->getContent($this->url,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,$this->url,$this->regular->load_js,$this->regular->user_agent);
             if(!$content){
                 return false;
             }
@@ -433,8 +431,7 @@ class Html extends Base
      */
     private function _parsePage($nextUrl)
     {
-        $this->regular->load_js = isset($this->regular->load_js) ? $this->regular->load_js : false;
-        $content = $this->getContent($nextUrl,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,$nextUrl,$this->regular->load_js);
+        $content = $this->getContent($nextUrl,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,$nextUrl,$this->regular->load_js,$this->regular->user_agent);
         if(!$content){
             return '';
         }
