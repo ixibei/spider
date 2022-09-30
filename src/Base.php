@@ -142,7 +142,7 @@ class Base
                 if($httpRefer){
                     $curl->setHeader('CURLOPT_REFERER',$httpRefer);
                 }
-                $userAgent = $userAgent ?  'Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)' : $userAgent;
+                $userAgent = $userAgent ? $userAgent : 'Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)';
                 $response = $curl
                     ->cookies(array('JSESSIONID' => 'constant-session-1'))
                     ->setHeader('User-Agent', $userAgent)
