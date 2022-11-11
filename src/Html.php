@@ -246,7 +246,7 @@ class Html extends Base
     public function printMess($name,$url,$data)
     {
         echo "<title>".$name."</title><pre>";
-        echo '<b style="color: red;">[ URL ]：</b><span style="color:blue;cursor: pointer;" class="copyUrl" data-clipboard-text="'.$url.'" onclick="copyFromUrl(\'copyUrl\')" >'.$url.'</span>'."<br/><br/>";
+        echo '<b style="color: red;">[ URL ]：</b><a style="color:blue;" href="'.$url.'" target="_blank" class="copyUrl" data-clipboard-text="'.$url.'" onclick="copyFromUrl(\'copyUrl\')" >'.$url.'</a>'."<br/><br/>";
         if(is_array($data)){
             print_r($data);
         } else{
