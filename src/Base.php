@@ -47,7 +47,7 @@ class Base
             if(!$this->json_test){
                 echo ($str);
             } else {
-                return json_encode(['error'=>1,'mess'=>$str]);
+                return json_encode(['error'=>200,'mess'=>$str]);
             }
         }
         //如果是laravel框架引用，则将错误信息保存在数据库中
