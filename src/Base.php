@@ -17,6 +17,7 @@ class Base
     public $regular = '';//提取网页的规则
     public $url = '';//要链接的url
     public $errorTimes = 0;
+    public $json_test = false;//json 格式输出数据
 
     /**
      * 初始化采集必须加载此方法传入参数
@@ -45,6 +46,8 @@ class Base
         if($this->test){
             if(!$this->json_test){
                 echo ($str);
+            } else {
+                return json_encode(['error'=>1,'mess'=>$str]);
             }
         }
         //如果是laravel框架引用，则将错误信息保存在数据库中
