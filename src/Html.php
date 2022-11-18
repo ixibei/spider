@@ -20,7 +20,7 @@ class Html extends Base
     {
         $this->content = $this->getContent($this->url,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,$this->url,$this->regular->load_js,$this->regular->user_agent);
         if(!$this->content){
-            return false;
+            return $this->content;
         }
 
         //全局替换
@@ -114,7 +114,7 @@ class Html extends Base
         if(!isset($this->regular->list_ruku) || !$this->regular->list_ruku){
             $content = $this->getContent($this->url,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,$this->url,$this->regular->load_js,$this->regular->user_agent);
             if(!$content){
-                return false;
+                return $content;
             }
 
             //全局替换
@@ -328,8 +328,7 @@ class Html extends Base
             }
             $return = $return->find($tmpArr[0],$tmpArr[1]);
             if(!$return){
-                $return = $this->_parseError('没有找到该规则：'.$rule);
-                break;
+                return $this->_parseError('没有找到该规则：'.$rule);
             }
         }
         return $return;
@@ -433,7 +432,7 @@ class Html extends Base
     {
         $content = $this->getContent($nextUrl,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,$nextUrl,$this->regular->load_js,$this->regular->user_agent);
         if(!$content){
-            return false;
+            return $content;
         }
         $dom = new simple_html_dom(str_replace('\\','',$content));
 

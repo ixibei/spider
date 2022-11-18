@@ -10,7 +10,7 @@ class Json extends Html  {
     {
         $this->content = $this->getContent($this->url,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,false,$this->regular->load_js,$this->regular->user_agent);
         if(!$this->content){
-            return false;
+            return $this->content;
         }
         //如果得到的不是一个json字符串，则后台要声明从何开始为json 从何结束为json
         if($this->regular->start){

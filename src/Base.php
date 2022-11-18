@@ -160,19 +160,16 @@ class Base
         if (!isset($response) || !$response) {
             if (isset($e) && $e) {
                 $str = $e->getMessage();
-                $this->_parseError($str);
-                return false;
+                return $this->_parseError($str);
             } else {
                 $str = 'curl unknown error  URL：'.$url.' 无返回值';
-                $this->_parseError($str);
-                return false;
+                return $this->_parseError($str);
             }
         }
 
         if ($curl->getStatus() >= 300 || $curl->getStatus() < 200) {
             $str = 'curl return code error ：'.$curl->getStatus().' URL：'.$url;
-            $this->_parseError($str);
-            return false;
+            return $this->_parseError($str);
         }
 
         if ($encoding == false) {
@@ -234,8 +231,7 @@ class Base
             return $content;
         } else {
             $str = '没有获取到内容，状态码'.$response->getStatus();
-            $this->_parseError($str);
-            return false;
+            return $this->_parseError($str);
         }
     }
 
