@@ -20,7 +20,7 @@ class Html extends Base
     {
         $this->content = $this->getContent($this->url,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,$this->url,$this->regular->load_js,$this->regular->user_agent);
         if(!$this->content){
-            return $this->_parseError('can\'t connect this url');
+            return false;
         }
 
         //全局替换
@@ -433,7 +433,7 @@ class Html extends Base
     {
         $content = $this->getContent($nextUrl,$this->regular->encode,$this->regular->url_add_param,$this->regular->is_proxy,$nextUrl,$this->regular->load_js,$this->regular->user_agent);
         if(!$content){
-            return '';
+            return false;
         }
         $dom = new simple_html_dom(str_replace('\\','',$content));
 
