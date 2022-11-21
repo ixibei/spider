@@ -34,7 +34,7 @@ class Base
         $this->regular->user_agent = isset($this->regular->user_agent) ? $this->regular->user_agent : false;
     }
 
-    public function _parseError($msg)
+    public function _parseError($msg,$curlError = false)
     {
         $this->errorTimes++;
         if(!$this->regular){
@@ -46,7 +46,7 @@ class Base
         if($this->test){
             if(!$this->json_test){
                 echo ($str);
-            } else {
+            } elseif($curlError) {
                 echo json_encode(['error'=>200,'mess'=>$msg]);
             }
         }
@@ -159,16 +159,16 @@ class Base
         if (!isset($response) || !$response) {
             if (isset($e) && $e) {
                 $str = $e->getMessage();
-                return $this->_parseError($str);
+                return $this->_parseError($str,true);
             } else {
                 $str = 'curl unknown error  URL：'.$url.' 无返回值';
-                return $this->_parseError($str);
+                return $this->_parseError($str,true);
             }
         }
 
         if ($curl->getStatus() >= 300 || $curl->getStatus() < 200) {
             $str = 'curl return code error ：'.$curl->getStatus().' URL：'.$url;
-            return $this->_parseError($str);
+            return $this->_parseError($str,true);
         }
 
         if ($encoding == false) {
@@ -230,7 +230,7 @@ class Base
             return $content;
         } else {
             $str = '没有获取到内容，状态码'.$response->getStatus();
-            return $this->_parseError($str);
+            return $this->_parseError($str,true);
         }
     }
 
