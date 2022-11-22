@@ -55,6 +55,7 @@ class Base
             if($this->regular){
                 $str = strip_tags($str);
                 $str = addslashes(htmlspecialchars($str));
+                $str .= ' [ ID ]：'.$this->regular->id;
                 DB::table('spider_log')->insert(['content'=>$str,'status'=>2,'type'=>1,'spider_id'=>$this->regular->id]);
                 DB::statement("update spider set failure_times=failure_times+1,all_failure_times=all_failure_times+1,failure_reason='".$str."' where id=".$this->regular->id);
             }
