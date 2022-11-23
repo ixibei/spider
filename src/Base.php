@@ -34,7 +34,13 @@ class Base
         $this->regular->user_agent = isset($this->regular->user_agent) ? $this->regular->user_agent : false;
     }
 
-    public function _parseError($msg,$curlError = false)
+    /**
+     * 记录错误日志
+     * @param $msg
+     * @param bool $jsonReturnError json 测试时，是否返回错误信息
+     * @return bool
+     */
+    public function _parseError($msg,$jsonReturnError = false)
     {
         $this->errorTimes++;
         if(!$this->regular){
@@ -46,7 +52,7 @@ class Base
         if($this->test){
             if(!$this->json_test){
                 echo ($str);
-            } elseif($curlError) {
+            } elseif($jsonReturnError) {
                 echo json_encode(['error'=>200,'mess'=>$msg]);
             }
         }

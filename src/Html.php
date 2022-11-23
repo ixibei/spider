@@ -55,7 +55,7 @@ class Html extends Base
 
             $circle = $listObj->find($this->regular->list_cricle);
             if(!$circle){
-                return $this->_parseError('列表页循环标识未找到 '.$this->regular->list_cricle);
+                return $this->_parseError('列表页循环标识未找到 '.$this->regular->list_cricle,true);
             }
 
             foreach($circle as $key=>$val){
@@ -131,7 +131,7 @@ class Html extends Base
 
             $detailObj = $this->_parseMultMark($this->dom,$this->regular->detail);//处理内容详情文字
             if(!$detailObj) {
-                return $this->_parseError('找不到内容详情，或内容详情字段为空！');
+                return $this->_parseError('找不到内容详情，或内容详情字段为空！',true);
             }
 
             //截取开始和结束的制定标识
