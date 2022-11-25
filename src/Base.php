@@ -153,6 +153,7 @@ class Base
                 ->setHeader('User-Agent', $userAgent)
                 ->setHeader('CLIENT-IP',$cip)//模拟请求ip
                 ->setHeader('X-FORWARDED-FOR',$xip)//模拟请求ip
+                ->timeout(10) //网络连接超时时间
                 ->get($url);
         } catch (\Throwable $e){
             $str = 'Throwable：'.$e->getMessage();
