@@ -12,7 +12,6 @@ use Cache;
 
 class Base
 {
-    public $request_retry_times = 2;//网络错误重连次数
     public $test = false;//是否测试模式
     public $regular = '';//提取网页的规则
     public $url = '';//要链接的url
