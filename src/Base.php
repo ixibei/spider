@@ -154,11 +154,12 @@ class Base
                 ->setHeader('CLIENT-IP',$cip)//模拟请求ip
                 ->setHeader('X-FORWARDED-FOR',$xip)//模拟请求ip
                 ->get($url);
-        } catch (Exception $e) {
-            $str = $e->getMessage();
+        } catch (\Throwable $e){
+            $str = 'Throwable：'.$e->getMessage();
             return $this->_parseError($str,true);
-        } catch (Error $e){
-            $str = $e->getMessage();
+        }
+        catch (Exception $e) {
+            $str = 'Exception：'.$e->getMessage();
             return $this->_parseError($str,true);
         }
 
