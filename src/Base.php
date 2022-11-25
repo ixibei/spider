@@ -136,43 +136,40 @@ class Base
             return $this->getContentLoadJs($url,$encoding,$httpRefer,$cip,$xip);
         }
 
-        $curl = new Curl();
-        $try_times = 0;
-
-        do {
-            try {
-                if($isProxy && class_exists('DB')){
-                    $proxyIp = $this->getProxyIp();
-                    if($proxyIp){
-                        $proxyIp = json_decode($proxyIp);
-                        $curl->proxy($proxyIp->ip,$proxyIp->port,$proxyIp->socket,$proxyIp->username,$proxyIp->password);
-                    }
+        try {
+            $curl = new Curl();
+            if($isProxy && class_exists('DB')){
+                $proxyIp = $this->getProxyIp();
+                if($proxyIp){
+                    $proxyIp = json_decode($proxyIp);
+                    $curl->proxy($proxyIp->ip,$proxyIp->port,$proxyIp->socket,$proxyIp->username,$proxyIp->password);
                 }
-                if($httpRefer){
-                    $curl->setHeader('CURLOPT_REFERER',$httpRefer);
-                }
-                $userAgent = $userAgent ? $userAgent : 'Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)';
-                $response = $curl
-                    ->cookies(array('JSESSIONID' => 'constant-session-1'))
-                    ->setHeader('User-Agent', $userAgent)
-                    ->setHeader('CLIENT-IP',$cip)//模拟请求ip
-                    ->setHeader('X-FORWARDED-FOR',$xip)//模拟请求ip
-                    ->get($url);
-            } catch (Exception $e) {
-                sleep(1);
             }
-        } while ((!isset($response) || !$response) && ++$try_times < $this->request_retry_times);
-
-        if (!isset($response) || !$response) {
-            if (isset($e) && $e) {
-                $str = $e->getMessage();
-                return $this->_parseError($str,true);
-            } else {
-                $str = 'curl unknown error  URL：'.$url.' 无返回值';
-                return $this->_parseError($str,true);
+            if($httpRefer){
+                $curl->setHeader('CURLOPT_REFERER',$httpRefer);
             }
+            $userAgent = $userAgent ? $userAgent : 'Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)';
+            $response = $curl
+                ->cookies(array('JSESSIONID' => 'constant-session-1'))
+                ->setHeader('User-Agent', $userAgent)
+                ->setHeader('CLIENT-IP',$cip)//模拟请求ip
+                ->setHeader('X-FORWARDED-FOR',$xip)//模拟请求ip
+                ->get($url);
+        } catch (Exception $e) {
+            $str = $e->getMessage();
+            return $this->_parseError($str,true);
+        } catch (Error $e){
+            $str = $e->getMessage();
+            return $this->_parseError($str,true);
         }
 
+        //无返回值
+        if (!isset($response) || !$response) {
+            $str = 'curl unknown error  URL：'.$url.' 无返回值';
+            return $this->_parseError($str,true);
+        }
+
+        //有返回状态码
         if ($curl->getStatus() >= 300 || $curl->getStatus() < 200) {
             $str = 'curl return code error ：'.$curl->getStatus().' URL：'.$url;
             return $this->_parseError($str,true);
