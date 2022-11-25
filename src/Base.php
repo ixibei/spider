@@ -37,10 +37,10 @@ class Base
     /**
      * 记录错误日志
      * @param $msg
-     * @param bool $jsonReturnError json 测试时，是否返回错误信息
+     * @param bool $TestJsonReturnError json 测试时，是否返回错误信息
      * @return bool
      */
-    public function _parseError($msg,$jsonReturnError = false)
+    public function _parseError($msg,$TestJsonReturnError = false)
     {
         $this->errorTimes++;
         if(!$this->regular){
@@ -52,7 +52,7 @@ class Base
         if($this->test){
             if(!$this->json_test){
                 echo ($str);
-            } elseif($jsonReturnError) {
+            } elseif($TestJsonReturnError) {
                 echo json_encode(['error'=>200,'mess'=>$msg]);
             }
         }
