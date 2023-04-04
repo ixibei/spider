@@ -371,25 +371,25 @@ class Html extends Base
             }
             $attr = $val->val;
             $this->data['multContent'][$val->name] = trim($obj->$attr);
-            if(isset($val->trace_url) && $val->trace_url){
+            if($val->trace_url !== ''){
                 $this->data['multContent'][$val->name] = $this->traceUrl($this->data['multContent'][$val->name]);
             }
             //前后位置截取
-            if($val->end_pos || $val->start_pos){
+            if($val->end_pos !== '' || $val->start_pos !== ''){
                 $this->data['multContent'][$val->name] = $this->_cutEndStartPos($this->data['multContent'][$val->name],$val->end_pos,$val->start_pos);
             }
             //替换内容
-            if($val->replace){
+            if($val->replace !== ''){
                 $this->regular->detail_replace = array_filter(explode('&&',$val->replace));
                 $this->data['multContent'][$val->name] = $this->_replace($this->data['multContent'][$val->name]);
             }
             //去除指定的标签内容
-            if($val->forbid_tags){
+            if($val->forbid_tags !== ''){
                 $forbidElement = array_filter(explode('&&',$val->forbid_tags));
                 $this->data['multContent'][$val->name] = $this->forbidClassAndTag($forbidElement,$this->data['multContent'][$val->name]);
             }
             //去除标签
-            if($val->strip_tags){
+            if($val->strip_tags !== ''){
                 if($val->strip_tags == 'all'){
                     $this->data['multContent'][$val->name] = strip_tags($this->data['multContent'][$val->name]);
                 } else {
@@ -397,20 +397,20 @@ class Html extends Base
                     $this->data['multContent'][$val->name] = $this->htmlpurifier($this->data['multContent'][$val->name],$stripTags,false);
                 }
             }
-            if(isset($val->trim) && $val->trim){
+            if($val->trim !== ''){
                 $this->data['multContent'][$val->name] = preg_replace('/(^(　| |\xC2\xA0|&nbsp;)+|(　| |\xC2\xA0|&nbsp;)+$)/','',$this->data['multContent'][$val->name]);
             }
-            if(isset($val->prefix) && $val->prefix){
+            if($val->prefix !== ''){
                 $this->data['multContent'][$val->name] = $val->prefix.$this->data['multContent'][$val->name];
             }
-            if(isset($val->suffix) && $val->suffix){
+            if($val->suffix !== ''){
                 $this->data['multContent'][$val->name] .= $val->suffix;
             }
-            if(isset($val->cover) && $val->cover){
+            if($val->cover !== ''){
                 $this->data['multContent'][$val->name] = $val->cover;
             }
             //解析PHP代码
-            if(isset($val->code) && $val->code){
+            if(isset($val->code) && $val->code !== ''){
                 $parsePhpCode = new ParsePhpCode();
                 $fileName = 'Field'.ucfirst($type).$this->regular->id.$key;
                 $parsePhpCode->code($val->code,$fileName);
