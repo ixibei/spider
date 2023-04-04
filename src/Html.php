@@ -371,7 +371,7 @@ class Html extends Base
             }
             $attr = $val->val;
             $this->data['multContent'][$val->name] = trim($obj->$attr);
-            if($val->trace_url !== ''){
+            if(isset($val->trace_url) && $val->trace_url !== ''){
                 $this->data['multContent'][$val->name] = $this->traceUrl($this->data['multContent'][$val->name]);
             }
             //前后位置截取
@@ -397,7 +397,7 @@ class Html extends Base
                     $this->data['multContent'][$val->name] = $this->htmlpurifier($this->data['multContent'][$val->name],$stripTags,false);
                 }
             }
-            if($val->trim !== ''){
+            if(isset($val->trim) && $val->trim !== ''){
                 $this->data['multContent'][$val->name] = preg_replace('/(^(　| |\xC2\xA0|&nbsp;)+|(　| |\xC2\xA0|&nbsp;)+$)/','',$this->data['multContent'][$val->name]);
             }
             if($val->prefix !== ''){
